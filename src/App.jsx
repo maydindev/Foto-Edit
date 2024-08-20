@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './styles.css'
 export default function App() {
   const [filter, setFilter] = useState({
@@ -6,6 +6,12 @@ export default function App() {
     contrast: 1,
     saturation: 1,
   })
+
+  useEffect(() => {
+    document.documentElement.style.setProperty("--brightness",filter.brightness)
+    document.documentElement.style.setProperty("--contrast",filter.contrast)
+    document.documentElement.style.setProperty("--saturation",filter.saturation)
+  },[filter])
 
   /* Challenge
 
@@ -21,6 +27,14 @@ export default function App() {
 		4. Kodunuzu mümkün olduğunca DRY yapmaya çalışın
 */
 
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setFilter(prev => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
   return (
     <div className='main-container'>
       <h1>
@@ -33,17 +47,17 @@ export default function App() {
 
       <form>
         <label>
-          <input type='range' name='brightness' min={0} max={2} step={0.1} />
+          <input type='range' name='brightness' value={filter.brightness} min={0} max={2} step={0.1} onChange={handleChange}/>
           <span>Brightness</span>
         </label>
 
         <label>
-          <input type='range' name='contrast' min={0} max={2} step={0.1} />
+          <input type='range' name='contrast' value={filter.contrast} min={0} max={2} step={0.1} onChange={handleChange}/>
           <span>Contrast</span>
         </label>
 
         <label>
-          <input type='range' name='saturation' min={0} max={2} step={0.1} />
+          <input type='range' name='saturation' value={filter.saturation} min={0} max={2} step={0.1} onChange={handleChange}/>
           <span>Saturation</span>
         </label>
       </form>
